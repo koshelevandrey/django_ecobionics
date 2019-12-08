@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<br>
+<br>
+<br>
+{% block tagName %}
+{% endblock %}
+{% if announce_list %}
+
+{% for announce in announce_list %}
+<div class="container content-width3" style="--font-size:20px;">
+    <div class="header reader-header reader-show-element">
+        <a class="domain reader-domain">
+            {{ announce.author.first_name }} {{ announce.author.last_name }}
+        </a>
+        <div class="domain-border"></div>
+        <h1 class="reader-title">
+            {{ announce.title }}
+        </h1>
+        <div class="meta-data">
+            <div class="reader-estimated-time">{{ announce.publication_date }}</div>
+        </div>
+        <div class="credits reader-credits">
+            {% for tag in announce.announce_tags.all %}
+            <a class="text-muted" href="{% url 'tag-announces' tag.tag_ID %}">
+                {{tag.name}}
+                {% if not forloop.last %}, {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="content">
+        <div class="moz-reader-content line-height4 reader-show-element">
+            <div id="readability-page-1" class="page">
+                <div id="myTabContent">
+                    {% if announce.preview_image %}
+                    <p>
+                        <img src="{{ announce.preview_image.url }}" style="width: 100%; display: block;">
+                    </p>
+                    {% endif %}
+                    <p><big>{{ announce.headline }}</big></p>
+                    {% if announce.document %}
+                    <p>
+                        <a href="{{ announce.document.url }}">
+                            Скачать документ
+                        </a>
+                    </p>
+                    {% endif %}
+                    {% if announce.presentation %}
+                    <p>
+                        <a href="{{ announce.presentation.url }}">
+                            Скачать презентацию
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if announce in user.profile.want_to_go_announces.all %}
+    <button type="button" class="btn btn-primary" onclick="location.href='{% url 'want-to-go' announce.announce_ID %}'">
+        Передумал идти ({{announce.profile_set.all.count}})
+    </button>
+    {% else %}
+    <button type="button" class="btn btn-outline-primary"
+            onclick="location.href='{% url 'want-to-go' announce.announce_ID %}'">
+        Хочу пойти ({{announce.profile_set.all.count}})
+    </button>
+    {% endif %}
+
+
+    <button type="button" class="btn btn-primary" data-toggle="collapse"
+            data-target="#commentdiv{{ announce.announce_ID }}">
+        Комментарии ({{announce.comment_set.all.count}})
+    </button>
+    <div id="commentdiv{{ announce.announce_ID }}" class="collapse">
+        {% for comment in announce.comment_set.all %}
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{ comment.user }}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{ comment.date }}</h6>
+                <p class="card-text">
+                    {{ comment.content }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+        <br>
+
+        <form action="{% url 'add-comment' announce.announce_ID %}" method="post">
+            {% csrf_token %}
+            <input id="comment_announce_{{ announce.announce_ID }}" type="text"
+                   name="comment_field_{{ announce.announce_ID }}" value="">
+            <input value="Добавить комментарий" class="btn btn-primary" type="submit">
+        </form>
+
+    </div>
+</div>
+<hr>
+{% endfor %}
+{% else %}
+<p>На данный момент объявлений нет</p>
+{% endif %}
+{% endblock %}
+
+{% block kaganovblock %}
+<div class="col-lg-3">
+    <div>
+        <h3 style="font-size:24px;">Основатель семинара</h3>
+        <div style="background:#eee; padding:10px; ">
+            <div style="text-align:center;">
+                <span style="color: #2C3E50;"><b>Юрий Тихонович Каганов</b></span>
+                <br><br>
+                {% load static %}
+                <img src="{% static 'home/images/kaganov.jpg' %}" style="margin:0 auto;" border="0">
+                <hr>
+                <a href="{% url 'kaganov' %}" class="btn btn-primary btn-lg">Подробнее</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "home/announce_list.html" %}
+
+    {% block tagName %}
+    {% if tag %}
+        <h2 style="text-align: center">{{tag.name}}</h2>
+        <hr>
+    {% endif %}
+    {% endblock %}
