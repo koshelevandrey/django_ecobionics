@@ -37,7 +37,7 @@ class AnnounceListView(generic.ListView):
 
 
 # Поставить "хочу пойти" на объявление
-@login_required
+@login_required(login_url='/home/login/')
 def want_to_go(request, announce_pk):
     try:
         announce = Announce.objects.get(pk=announce_pk)
@@ -57,7 +57,7 @@ def want_to_go(request, announce_pk):
 
 
 # Добавить комментарий
-@login_required
+@login_required(login_url='/home/login/')
 def add_comment(request, announce_pk):
     try:
         announce = Announce.objects.get(pk=announce_pk)
@@ -72,7 +72,7 @@ def add_comment(request, announce_pk):
 
 
 # Обновление профиля пользователя
-@login_required
+@login_required(login_url='/home/login/')
 # Указываем, что это транзакция. Если она не выполнится успешно, то будет откат
 @transaction.atomic
 def update_profile(request):
@@ -103,7 +103,7 @@ class SignUpView(CreateView):
     template_name = 'signup.html'
 
 
-# Новости по тегу
+# Объявления по тегу
 class TagAnnounceListView(generic.ListView):
     model = Announce
     context_object_name = 'announce_list'

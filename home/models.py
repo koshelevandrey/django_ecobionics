@@ -38,14 +38,12 @@ class Announce(models.Model):
     headline = models.TextField(null=True, blank=True)
     publication_date = models.DateTimeField(auto_now_add=True)
     preview_image = models.ImageField(upload_to='images', null=True, blank=True)
-    # preview_image = models.ImageField(upload_to=user_directory_path)
     # Ссылка на превью-картинку
     # preview_image = models.CharField(max_length=300, null=True, blank=True)
     announce_tags = models.ManyToManyField(Tag, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     presentation = models.FileField(upload_to='files', null=True, blank=True)
     document = models.FileField(upload_to='files', null=True, blank=True)
-    # presentation = models.CharField(max_length=300, null=True, blank=True)
 
     # Метаданные класса
     class Meta:
