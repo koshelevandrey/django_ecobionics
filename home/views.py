@@ -107,6 +107,7 @@ class SignUpView(CreateView):
 class TagAnnounceListView(generic.ListView):
     model = Announce
     context_object_name = 'announce_list'
+    # Расположение шаблона
     template_name = 'home/tag_announce_list.html'
     paginate_by = 10
 
