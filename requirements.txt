@@ -1,5 +1,5 @@
 dj-database-url==0.5.0
-Django==2.2.8
+Django==2.2.24
 django-heroku
 gunicorn==20.0.4
 pillow==6.2.0
